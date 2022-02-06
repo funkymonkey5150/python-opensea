@@ -1,0 +1,189 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## OpenSeaAPI object"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# import my Opensea API key from config.py\n",
+    "from config import OPENSEA_APIKEY\n",
+    "\n",
+    "# import the OpenseaAPI object from the opensea module\n",
+    "from opensea import OpenseaAPI\n",
+    "\n",
+    "# create an object to interact with the Opensea API (need an api key)\n",
+    "api = OpenseaAPI(apikey=OPENSEA_APIKEY)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Basic usage"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# fetch a single asset\n",
+    "contract_address = \"0x495f947276749Ce646f68AC8c248420045cb7b5e\"\n",
+    "token_id = \"66406747123743156841746366950152533278033835913591691491127082341586364792833\"\n",
+    "api.asset(asset_contract_address=contract_address, token_id=token_id)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# get values from the dictionary\n",
+    "contract_address = \"0x495f947276749Ce646f68AC8c248420045cb7b5e\"\n",
+    "token_id = \"66406747123743156841746366950152533278033835913591691491127082341586364792833\"\n",
+    "result = api.asset(asset_contract_address=contract_address, token_id=token_id)\n",
+    "print(\"NFT name: \", result[\"name\"])\n",
+    "print(\"Image URL: \", result[\"image_url\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# export json\n",
+    "contract_address = \"0x495f947276749Ce646f68AC8c248420045cb7b5e\"\n",
+    "token_id = \"66406747123743156841746366950152533278033835913591691491127082341586364792833\"\n",
+    "api.asset(asset_contract_address=contract_address, token_id=token_id, export_file_name='asset.json')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# fetch a single collection\n",
+    "api.collection(collection_slug=\"cryptopunks\", export_file_name='cryptopunks.json')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "dict_keys(['collection'])"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# print the available keys in the dictionary\n",
+    "api.collection(collection_slug=\"cryptopunks\").keys()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Collection name:  CryptoPunks\n",
+      "Discord:  https://discord.gg/tQp4pSE\n",
+      "Twitter:  larvalabs\n"
+     ]
+    }
+   ],
+   "source": [
+    "# get values from the dictionary\n",
+    "result = api.collection(collection_slug=\"cryptopunks\")\n",
+    "collection = result[\"collection\"]\n",
+    "print(\"Collection name: \", collection[\"name\"])\n",
+    "print(\"Discord: \", collection[\"discord_url\"])\n",
+    "print(\"Twitter: \", collection[\"twitter_username\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# export into json\n",
+    "api.collection(collection_slug=\"cryptokitties\", export_file_name='cryptokitties.json')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Download NFT transactions"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# fetch multiple events\n",
+    "from opensea import utils as opensea_utils\n",
+    "\n",
+    "period_start = opensea_utils.datetime_utc(2021, 11, 6, 14, 25)\n",
+    "period_end = opensea_utils.datetime_utc(2021, 11, 6, 14, 30)\n",
+    "result = api.events(\n",
+    "    occurred_after=period_start,\n",
+    "    occurred_before=period_end,\n",
+    "    limit=300,\n",
+    "    export_file_name=\"sales.json\",\n",
+    "    event_type=\"successful\"\n",
+    ")"
+   ]
+  }
+ ],
+ "metadata": {
+  "interpreter": {
+   "hash": "4d8d5aaf991dcc2a4f992423b03b29e8642311dfde10f0bc93e9172a7ed950fc"
+  },
+  "kernelspec": {
+   "display_name": "Python 3.8.10 64-bit ('env': venv)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.10"
+  },
+  "orig_nbformat": 4
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
